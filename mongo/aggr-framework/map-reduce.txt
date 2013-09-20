@@ -1,0 +1,4 @@
+- used for aggregation 
+- is a programming model
+
+source data --> run through map() --> returns k/v pairs --> reduce() --> result is k/v pairs 

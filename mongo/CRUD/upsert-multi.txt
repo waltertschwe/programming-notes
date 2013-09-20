@@ -1,0 +1,28 @@
+== MORE ON UPDATE == 
+== UPSERTS & MULTI == 
+
+db.<collection>.update(<where>, <obj>, <upsert>, <multi>)
+
+upsert - default set to false
+multi  - default set to false
+
+
+== MULTI == 
+-- pass multi true when doing multiple record update 
+db.users.update ({ active : true}, { $inc : { priority : 1 }} , false, true})
+- we want to update priority to 1 where active = true
+  if multi set to false will only do for the first record  
+  set multi to true to do it for all records where active = true 
+
+== UPSERTS == 
+insert if not present when doing the update
+db.pageview.update({ _id: "/sports/football"},
+                   {$inc : { views : 1}},
+                   true)
+-increments the views field, if it doesn't exist add it.
+
+ 
+
+ 
+
+

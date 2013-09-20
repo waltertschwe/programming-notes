@@ -1,0 +1,17 @@
+sudo service mongodb start
+sudo service mongodb stop
+sudo service mongodb restart 
+
+CONFIG
+/etc/monbodb.conf
+
+INIT.D
+/etc/init.d/mongodb
+
+LIB
+/var/lib/mongodb
+
+LOG
+/var/log/mongodb
+
+

@@ -1,0 +1,22 @@
+
+## create 3 shards
+
+mkdir -p /data/rs1 /data/rs2 /data/rs3
+
+mongod --replSet m101 --logpath "1.log" --dbpath /data/rs1 --source ec2-50-19-187-57.compute-1.amazonaws.com --port 27017 --smallfiles --fork
+mongod --replSet m101 --logpath "2.log" --dbpath /data/rs2 --source ec2-50-19-187-57.compute-1.amazonaws.com --port 27018 --smallfiles --fork
+mongod --replSet m101 --logpath "3.log" --dbpath /data/rs3 --source ec2-50-19-187-57.compute-1.amazonaws.com --port 27019 --smallfiles --fork
+
+# connect to mongo port
+mongo --port 27017
+
+## create the replica set
+config = { _id: "m101", members:[
+          { _id : 0, host : "localhost:27017"},
+          { _id : 1, host : "localhost:27018"},
+          { _id : 2, host : "localhost:27019"} ]
+};
+rs.initiate(config);
+
+## check the status 
+rs.status()

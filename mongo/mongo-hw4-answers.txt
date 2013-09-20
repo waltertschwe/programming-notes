@@ -1,0 +1,40 @@
+##1
+db.posts.aggregate([
+{ $unwind: "$comments" },
+{$group:
+        { _id: "$comments.author",
+        count : { $sum : 1 }} 
+},
+   { $sort: { count: 1 } }
+])
+
+## 2
+##  match states
+##  group by city & state ( sum the population because cities have same zip codes)
+##  greater than 25000
+##  get the avg
+
+db.zips.aggregate([
+{ $match : { "state" : /CA|NY/}},
+{$group : { _id : {"city" : "$city", "state" : "$state"}, 
+      "pop" : { $sum : "$pop"}}},
+{ $match : { "pop" : { $gt : 25000}}},
+{$group : { _id : null,
+       "average" : { $avg : "$pop" } } }
+])
+
+##3
+db.grades.aggregate([
+{ $unwind: "$scores" },
+{ $match : { "scores.type" : /homework|exam/ } },
+{$group : { _id : {"student_id" : "$student_id", "class_id" : "$class_id"}, score : { $avg : "$scores.score"}}},
+{$group : { _id : { "class_id" : "$_id.class_id"}, total_kids : { $sum : 1}, average : { $avg : "$score"}}},
+{$sort : { average : 1 }}
+])
+
+##4 
+db.zips.aggregate([{$project: { first_char: {$substr : ["$city",0,1]}, pop : "$pop"}}, 
+{$sort : { first_char : 1 }},     
+{$match : { "first_char" : /^\d.*$/ }},
+{$group : { _id : null, count: { $sum : "$pop" } } }
+])

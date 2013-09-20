@@ -1,0 +1,18 @@
+Replication Factor
+rf = 3 
+n = 3
+we have 3 copies of the data 
+
+100mm docs
+20 shards 
+5mm docs/per shard average 
+
+If you have a replication of 3 then you are really storing
+300 Million documents 
+
+Replication on mongodb is asynchronous 
+meaning you can get acknowledgment before data has been replicated to all machines 
+
+- always a single primary (not master-master)
+- is "statement-based"  
+ 

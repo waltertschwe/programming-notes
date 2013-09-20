@@ -1,0 +1,11 @@
+> db.zips.aggregate([ { $group : 
+    { _id : {"state" : "$state"},  
+     count : { $sum: 1 } } }, 
+{ $sort : { count : 1} } ] )
+
+group by state and incr count by 1 for each state.  sort ascending 
+
+db.zips.aggregate( [ { $project : { city : { $substr : ["$city",0,1] } } }, { $group : { _id : "$city", n : { $sum : 1} }  } , { $match : { _id : /[0-9]/ }} ]  )
+
+get all the cities that start with a number 0-9 
+

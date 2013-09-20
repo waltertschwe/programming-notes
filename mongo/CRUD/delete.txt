@@ -1,0 +1,18 @@
+Removing or Deleteing Documents 
+
+db.<collectionName>.remove(<expr>)
+                           (where expression)
+
+this is a multi document operation. Depending on the where expression
+
+== EXAMPLE ==
+
+1. db.test.remove ( { _id : 100 } ) 
+
+good practice run db.find on your delete expression to find out what documents you are deleteing or
+
+2. db.test.remove ( { } )   <-- delete all documents 
+
+3. db.users.remove({"addr.city" : "Lyon" , "registered" : false})
+ -- removes all users where object address.city = lyon AND registered = false
+

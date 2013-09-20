@@ -1,0 +1,11 @@
+MONGODB 
+
+Replica Set - Notion of a replica cluster 
+- has automatic failover
+- automatic node recovery after fail over 
+- need a majority of slaves "consensus" to agree that the master is down
+  then a new primary will be elected 
+- writes always go to the primary 
+== RECOVERY ==
+ 
+

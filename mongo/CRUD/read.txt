@@ -1,0 +1,6 @@
+== READ ==
+
+1. db.products.find({  } ) <-- get All
+2. db.products.find({ } ) <-- pretty output
+3. db.products.find({ "limits.voice.units" : "minutes"}).count()
+finds all documents in object { limits : { voice : { units }}} where units = minutes

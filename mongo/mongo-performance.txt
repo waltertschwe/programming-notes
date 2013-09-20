@@ -1,0 +1,2 @@
+mongotop
+mongostat - idx miss % - other detailed fields 

@@ -1,0 +1,2 @@
+Location of Modules
+/usr/lib/node_modules/npm

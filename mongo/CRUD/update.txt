@@ -1,0 +1,55 @@
+UPDATES - write operations
+
+db.<collectionName>.update({<where>, <doc_or_partial_update_expression>
+			   , <upsert>
+                           , <multi> 
+                          )
+
+upsert - optional update or insert if not present (boolean value)
+multi  - optional means update many documents not just one. do the entire collection whatever matched our where expression. (partial update expression) 
+                         
+Two kinds of updates.
+1. Full document update/replace
+2. Partial update, only change single field (more likely)
+
+EXAMPLES :
+
+1.
+db.test.update( {_id : 100}, {"_id" : 100, "x" : "hello world", "y" : 123} )
+
+2. myobj = db.test.findOne()
+   myobj.y = 123
+   db.test.update( {_id: myobj._id}, myobj)  <-- updates it on the server 
+will add field ("y": 123) to the one document grabbed 
+
+   OR 
+
+  db.test.save(myobj)  <-- same operation save is a helper
+
+== PARTIAL UDPATES ==
+--bson size limit on document 16MB/doc -- 
+"GridFS" <-- allows larger documents. store documents in chunks  
+
+$set <-- set a new value if the field did not already exist 
+$push <-- add something to an array
+$addToSet <-- add to array if not already present
+$pop <-- remove from array
+$unset <-- delete a field  
+
+EXAMPLE :
+1. db.test.update({_id:101}, { $set : {y:100}}) 
+-- will update _id:101 and add y:100 and not delete other fields
+2. db.test.update({_id:103}, {$push : {arr : "hi"}}) 
+-- will updated array hi to _id 103 or create it if it did not exist 3
+3. db.test.update({_id:103}, {$addToSet : { arr : "hi" }})
+-- will only addToSet if it does not exist. unlike $push it will keep adding the value even if does exist.  (only adds once) 
+
+
+
+
+
+
+
+
+
+

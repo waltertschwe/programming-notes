@@ -1,0 +1,120 @@
+## sum up the population by state
+db.zips.aggregate([
+    {$group:
+        { _id: "$state",
+        population : {$sum : "$pop"}
+} }
+])
+
+## average price of a given category, (category ex. tablet)
+db.products.aggregate([
+    {$group:
+        { _id: {
+              "category" : "$category",
+         },
+        avg_price : {$avg : "$price"}
+} }
+])
+
+## addToSet  - adds it only if it's not already there
+## ex. manufacturer - apple - will addToSet (iphone, ipad,) but do it only once 
+db.products.aggregate([
+    {$group:
+        { _id: {
+              "maker" : "$manufacturer",
+         },
+        categories : {$addToSet : "$category"}
+} }
+])
+
+or 
+## run again test db -zip collection
+## returns all the postal_codes that are found in a city
+db.zips.aggregate([
+    {$group:
+        { _id: "$city",
+        "postal_codes" : {"$addToSet" : "$_id"}
+} }
+])
+
+## push - similar to addToSet - but doesn't guarantee it only adds once doesn't look through to see if it's already there
+## pushes new zip code to city key
+db.zips.aggregate([
+    {$group:
+        { _id: "$city",
+        "postal_codes" : {"$push" : "$_id"}
+} }
+])
+## $max & $min - find max or min price by manufacturer
+db.products.aggregate([
+    {$group:
+        { _id: {
+              "maker" : "$manufacturer",
+         },
+        maxprice : {$max :  "$price"}
+} }
+])
+
+## DOUBLE GROUPING:
+db.fun.aggregate([{$group:{_id:{a:"$a", b:"$b"}, c:{$max:"$c"}}}, 
+                  {$group:{_id:"$_id.a", c:{$min:"$c"}}}])
+
+
+## $project
+db.products.aggregate([
+   {$project: 
+     {
+       _id: 0,  ( don't return _id field) 
+       "maker" : {$toLower:"$manufacturer"},
+       "details" : {"category" : "$category",
+                    "price" : "$price"
+                   },
+       "item": $name
+      }
+    }
+]) 
+
+## match - serves as a filter 
+## ex. match on only documents that are in ny state
+db.zips.aggregate([
+    {$match:
+      {
+          state : "NY"
+      }
+    }
+])  
+
+## sort - sort documents 
+## sorting can be a memory hog
+## can go before or after the group phase 
+db.zips.aggregate([
+    {$sort:
+      {
+          population : -1 
+      }
+    }
+])
+
+## skip and limit
+## doesn't make any sense unless you first sort
+## skip first then limit duh
+db.zips.aggregate([
+    {$sort:
+      {
+          population : -1 
+      }
+    ),
+    { $skip : 10 },
+    { $limit : 5}
+]) 
+
+## $first and $last
+## after sort phase you can get first or last document
+## can be used in a group pipe
+
+## $unwind
+## unjoins the data (array)
+## data explosion!
+
+## double $unwind
+## on multiple arrays 

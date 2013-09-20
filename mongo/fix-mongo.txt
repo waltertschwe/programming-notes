@@ -1,0 +1,15 @@
+Setp 1) sudo rm /var/lib/mongodb/mongod.lock
+remove lock file.
+
+Setp 2) mongod --repair
+
+repair mongodb
+
+Setp 3) sudo start mongodb
+and start mongodb
+
+Setp 4) sudo status mongodb
+Check status of mongodb
+
+Setp 5) mongo
+Start mongo console.

@@ -1,0 +1,76 @@
+Gets all the manfacturers and adds 1 each time 
+the same manufacturer is found 
+almost like an upsert creating manufacturers as they are found 
+and adding +1 to num_products key
+db.products.aggregate([
+  {$group:
+     {
+        _id: "$manufacturer",
+        num_products : {$sum:1}
+     }
+   }
+])
+
+Aggregation Pipeline
+1. $project - select which keys you are interested in, reshape 
+            - one to one if it sees 10 documents it gives you 10 documents.
+
+2. $match - filter (ex. find only Apple products)
+
+3. $group - aggregation, group by a certain key n:1 
+          - can reduce the number of documents
+
+4. $sort  - sort
+5. $skip  - skip documents
+6. $limit - limit the number of documents through the pipeline
+7. $unwind - unjoins the data 
+
+goes through these stages and then gives you a result set.
+
+
+COMPOUND GROUPING
+- grouping by manufacturer & category 
+db.products.aggregate([
+    {$group:
+        { _id: { 
+              "manufacturer" : "$manufacturer",
+              "category" : "$category"},
+          num_prodcuts : $sum:1 }
+} }
+])
+
+AGGREGATION EXPRESSIONS you can use in $GROUP
+1. $sum - count 
+2. $avg - can get average of key across documents
+3. $min - min of document
+4. $max - max value of key
+5. $push - builds arrays
+6. $addtoSet - builds arrays but only adds uniquely (more useful)
+7. $first - find first value it find during the group (must be used with sort )
+8. $last - find last value during the group (must be used with sort)  
+
+
+$sum - 
+db.products.aggregate([
+    {$group:
+        { _id: {
+              "maker" : "$manufacturer",
+         },
+        sum_prices : {$sum : "$price"}
+} }
+])
+
+$avg - finds the average price of a given category (ex. tablet) 
+db.products.aggregate([
+    {$group:
+        { _id: {
+              "category" : "$category",
+         },
+        avg_price : {$avg : "$price"}
+} }
+])
+
+DOUBLE GROUPING
+db.fun.aggregate([{$group:{_id:{a:"$a", b:"$b"}, c:{$max:"$c"}}}, {$group:{_id:"$_id.a", c:{$min:"$c"}}}])
+
+$project - reshapes the document helps clean up the document  

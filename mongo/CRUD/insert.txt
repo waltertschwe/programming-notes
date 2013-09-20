@@ -1,0 +1,12 @@
+INSERT:
+db.<collectionName>.insert(<document>)
+
+db.getLastError() --> last error from an insert
+
+EXAMPLE:
+
+db.products.insert({ x : "hello" })
+
+BULK INSERT - API Drivers have bulk shell does not.
+
+

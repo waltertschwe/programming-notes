@@ -1,0 +1,63 @@
+== SETUP 3 NODE REPLICA SET == 
+1. mkdir <directory>/1
+   mkdir <directory>/2
+   mkdir <directory>/3
+
+2.
+ mongod --replSet MyRepSet --dbpath 1 --port 27001 --oplogSize 50 --logpath log.1 --logappend --fork 
+ mongod --replSet MyRepSet --dbpath 2 --port 27002 --oplogSize 50 --logpath log.2 --logappend --fork 
+ mongod --replSet MyRepSet --dbpath 3 --port 27003 --oplogSize 50 --logpath log.3 --logappend --fork 
+
+-- They are now up but not online need to initiate the set -- 
+
+3. To Initiate the set
+- specify the config ( in mongo shell)
+- inital data --> replSetInitiate 
+
+mongo --port 27001
+cfg = { _id : "myRepSet",
+        members : [
+        { _id : 0, host : "<machinename>:27001" },
+        { _id : 1, host : "<machinename>:27002" },
+        { _id : 2, host : "<machinename>:27003" }
+        ]
+}
+
+- don't use raw ip addresses
+- don't use names from /etc/hosts  
+- use DNS
+    - pick an appropriate TTL (eg few minutes) 
+
+4. rs.initiate( cfg )
+NOTE : running rs.initiate() without the cfg parameter will auto setup your config and run (this might have been enhancement) 
+
+5. rs.status()
+   - list members in replica set  
+
+== REPLICA SET NOW ACTIVE ==
+
+== OTHER COMMANDS == 
+use local
+
+db.system.replset.find().pretty() --> stored repl config in the local db
+- is a single document (singleton) 
+- done this way so config would have to be updated atomically 
+
+db.isMaster()
+
+rs.help() --> gets all replica set commands 
+
+rs.slaveOk() --> lets reads happen from secondary. == IMPORTANT == otherwise will not be able to read from secondary in shell 
+
+** To Add Secondary Only **
+rs.add( { "_id": 3, "host": "mongodbd3.example.net:27017", "priority": 0 } )
+
+
+== SHUTDON MONGOD == 
+ps -Aef | grep mongodb
+kill port number
+ex. kill 427      <-- that's the right way 
+do not use kill -9 427 
+
+
+

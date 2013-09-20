@@ -1,0 +1,68 @@
+Create Index:
+db.students.ensureIndex($params)
+
+Find Indexes:
+db.system.indexes.find() 
+
+Get additional info on indexes
+db.students.getIndexes(); 
+
+drop index:
+db.students.dropIndex({ 'student_id' : 1 } )
+
+Multikey Index:
+only works if it's an array
+cannot index on parrallel arrays:
+db.bbb.insert({a:[1,2,4], b:[1,2,3]})
+
+Indexing not restricted to first level of keys within a document
+
+UNIQUE INDEXES - CREATING
+db.stuff.ensureIndex({'thing':1}, {unique:true}) 
+can't have duplicate keys or values, constraint
+
+REMOVING DUPLICATES WHEN CREATING UNIQUE INDEXES
+dangerous because it chooses which one to remove
+db.stuff.ensureIndex({'thing':1},{unique:true, dropDupes:true}) 
+
+SPARSE INDEXES:
+when a value doesn't exist that is being indexed a null value will be given
+db.stuff.ensureIndex({'thing':1},{unique:true, sparse:true}) 
+potential to change query results when sorting
+
+INDEX CREATION BACKGROUND OR FOREGROUND
+Foregrund - faster but blocks writers 
+Background - slow 2x 3x or slower but does not block writers
+
+Foreground Index - in dev 
+Background Index - in prod have to run in background if you are doing any writes to the same DB
+
+EXPLAIN 
+db.foo.find({c:1}).explain()  - gives details on your query
+
+INDEX - want them to be in memory
+get index size:
+db.students.stats()
+"totalIndex Size": 543597712 - 543 mb 
+OR 
+db.students.totalIndexSize() 
+
+INDEX CARDINALITY:
+Regular = 1 : 1 
+Sparse : document missing the key being indexed.  it will not be indexed. 
+         index could be less than the number of documents
+Multikey: index could be greater than the number of documents
+
+HINTING AN INDDX
+db.foo.find({a:100,b:100,c:100}).hint({a:1,b:1,c:1})
+or 
+hint({$natural:1}) 
+
+
+GEOSPATIAL INDEXES: (2d)
+db.places.find({location: {$near: [74,140]}}).limit(3)
+
+LOG SLOW QUERIES:
+mongo logs slow queries over 100ms  (default)
+
+

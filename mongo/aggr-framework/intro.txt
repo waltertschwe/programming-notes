@@ -1,0 +1,26 @@
+Very similar to:
+SQL: 
+   "Group By"
+
+Transforms/filters and reducers
+
+$match - filters down documents ( much like where clause)
+$project - pulls out certain fields from the document
+$group   - how we aggregate
+$sort    - sorting
+$limit   - limit the amount of output after sorting
+$unwind  - unwinds an array that is embedded in a document
+
+sample: 
+db.collectionName.aggregate (
+[
+  { $match : _____ },
+  { $project : _____ },
+  { $group : ________)
+]
+);
+
+## FIND AND MODIFY COMMAND  
+-  atomic operation
+
+

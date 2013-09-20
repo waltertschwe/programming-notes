@@ -1,0 +1,60 @@
+CRUD COMMANDS - 5 core 
+
+Query
+Insert
+Update 
+Remove 
+GetMore
+
+Commands are sent to the server as queries
+
+== SAMPLE COMMANDS == 
+getLastError 
+isMaster
+drop
+create
+compact
+serverStatus
+replSetGetStatus
+addShard
+aggregate
+mapReduce
+count
+findAndModify
+
+== INVOKE COMMANDS ==
+
+db.runCommand({     })
+db.runCommand ({<commandName> : <val>,
+                param1 : value1,
+                param2 : value2,
+                ...
+               }
+             )
+example
+1. db.runCommand({ getLastError : 1 } ) 
+or 
+db.runCommand({ getLastError: 1, w:2}) 
+extra paramter, waits for 2 servers 
+
+
+db.runCommand( { isMaster : 1 })
+or 
+db.isMaster()
+
+
+db.help() <-- command helper
+db.serverStatus()
+
+## CREATE INDEX
+db.products.ensureIndex( { name: 1}) 
+-- creates index on the name field in the products collection 
+db.products.find( { name : "AC3 Case Red"}) 
+-- will use the name index 
+db.products.find( { name : "AC3 Case Red"}).explain()  <-- will verify the query used the index, "cursor": "BtreeCursor name_1" 
+
+## SHOW ALL INDEXES FOR A COLLECTION
+db.products.getIndexes();
+
+
+

@@ -1,0 +1,27 @@
+-combination of a query and a update
+- can update a document will return the document too you
+  can get back the document before the update or after whichever you prefer
+- is one atomic operation 
+- good for implementing queue 
+
+example:
+
+db.<collection>.findAndModify({
+sort : {  ts: 1),
+remove : true
+}
+)
+
+- removes the top item from this collection 
+
+example:  
+db.<collection>.findAndModify( {
+query : { status : null),
+update : { $set : { status : "inprogress } },
+sort : { ts :1 }
+}
+)
+
+sets the oldest item to a status on "inprogress"
+
+

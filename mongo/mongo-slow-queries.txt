@@ -1,0 +1,33 @@
+PROFILER
+writes documents to system.profile
+
+Three Levels
+0 - default (off)
+1 - log slow queries
+2 - log all your queries (debugging feature)
+
+Start the profiler:
+logs any queries above 2 milliseconds
+mongod -dbpath /usr/local/var/mongodb --profile 1 --slowms 2
+
+db.system.profile.find() - will show slow queries 
+
+db.system.profile.find({millis:{$gt:1000}}).sort({ts:-1})
+-- all queries that took longer than one second ordered by
+   timestamp descending 
+
+MONOGO SHELL COMMANDS:
+
+db.getProfilingLevel()
+
+db.getProfilingStatus()
+
+db.setProfilingLevel(1,4)
+slow queries above 4 milliseconds
+
+db.setProfilingLevel(0)
+turn off profiling
+
+
+
+

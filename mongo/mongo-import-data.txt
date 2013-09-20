@@ -1,0 +1,4 @@
+mongoimport -d blog -c posts < posts.json
+
+:
+

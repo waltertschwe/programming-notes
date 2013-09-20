@@ -1,0 +1,86 @@
+Replica Set - Must have at least 3 nodes`
+#1 Primary - writes and reads go here. only one primary allowed in a replica set
+#2 Secondary
+#3 Secondary
+
+Other types of Nodes
+- Arbiter - only used for voting if primary node goes down
+- Hidden - often used for analytics, can't become the primary node
+- Delayed/Regular - could be hours behind or whatever set, can't become the primary
+
+## Creating a replica set 
+rs.slaveOK() - allow secondaries to be queried
+rs.status() - look at different configuration
+rs.isMaster() - returns boolean 
+rs.stepDown() - forces replica set primary to step down new primary elected
+rs.conf() - configuration
+rs.help() - commands
+
+oplog.rs - logs inserts etc is a capped collection 
+secondaries query the primary by timestamp and ask for updates
+
+## pymongo connect to a replicat set in python.
+## if you leave a node out of the list it's okay they are self discovering
+## as long as you have one valid node
+c = pymongo.MongoClient(host=["mongodb://localhost:27017",
+                              "mongodb://localhost:27018",
+                              "mongodb://localhost:27019"],
+                        replicaSet="rs1",
+                        w="disasterProof", j=True)
+
+w and j parameters 
+w - determines how many nodes you wait for before you move on when you do insert
+    ex. w = 2 will wait for primary and one secondary to acknowldege right
+j - journal = 1 will wait for primary to write it to disk
+
+can set these values in the connection or in the config
+better from sys admin standpoint
+
+FAILOVER
+- program will terminate if you don't catch the error while new
+  primary is being elected
+
+- catching failover exception 
+   use try/catch log error, sleep .5 sec, will lose inserts
+   but improvement from application crashing
+
+- proper handling of failover 
+  put inserts into a retries loop 
+       ## will try 3 times over a time period of 15 seconds
+       for retries in range(0,3):
+            try:
+                test.insert(doc)
+                print "Inserted " + str(i)
+                break
+            except pymongo.errors.DuplicateKeyError:
+                print "Duplicate key error" ## allows you to run the insert safely
+                break
+            except:
+                print sys.exc_info()[0]
+                print "Retrying..."
+                time.sleep(5) ## failed wait 5 seconds
+
+        time.sleep(.5)
+
+READ PERFERNCE 
+- always read primary
+- always read secondary 
+- prefer secondary but take primary if no secondary
+- prefer primary but no primary take a secondary 
+- nearest 
+- tagging 
+
+SHARDING 
+horizontal scaling out
+mongos - router takes care of distribution of all different hosts and route them
+         talks to mongod's
+shard key -  ex. order_id - some part of the document itself 
+             if no shard key then have to scatter request to all servers
+             shard key must be included on insert
+can shard at db or collection level
+every doc must contain the shard key
+shard key is immutable 
+can't have a unique key (index) unless it's also part of the shard key, can be multi-key but must start with the shard key
+
+CHOOSE SHARD KEY
+

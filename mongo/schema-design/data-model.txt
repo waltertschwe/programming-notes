@@ -1,0 +1,17 @@
+Things to decide.
+
+1. what are the collections
+2. How many collections
+3. embedding vs linking  
+
+Aspects to keep in mind
+
+1. structure for the queries 
+2. sharding (partition data)
+3. atomicity requirements.  
+(ACID) Atomicity, Consistency, Isolation, Durability 
+mongodb supports atomic operations (ACID) on single documents.  if two documents would not be atomic operation 
+
+Linking - one document to another. similar to foregin keys in the relational world.
+Embed - putting different data structures in the same collection 
+

@@ -1,0 +1,39 @@
+help keys
+
+$all = must match all cases
+$in = must match at least one case
+
+cur = db.accounts.find(); null;
+## sets a cursor (or object) with the results of the query
+
+cur.sort( { name : -1 } ).limit(1).skip(1); null;
+##this sorts by name in reverse order.
+## limits it to 1 result returned.
+##and skips the first returned name 
+## processed on the server first the sort, second the skip, then the limit
+
+while (cur.hasNext()) printjson(cur.next());
+## loop through and print
+
+## can first do a find then a sort 
+db.users.find( {type: "name}).sort( { name : - 1}).limit(1).skip(1);
+
+## count documents
+db.users.count({ name: "walter" })
+
+## update document
+db.foo.update({ username : "walter"} , { $set : { interests : [ dog, food]}}, { upsert : true} );
+## the upsert will perform the operation if username walter does not exist
+## {multi : true } will traverse every document in the collection and add a new field
+
+## Delete Documents
+db.people.remove( { name : " Walter" });
+db.people.remove( { } ); - drop all
+db.people.drop() - drop all will be faster one atomic operation
+
+
+## outcome of the last write operation
+db.runCommand ( { getLastError : 1 } ) 
+
+
+
