@@ -6,3 +6,7 @@ php app/console cache:clear --env=prod --no-debug
 
 Generate getters & setters w/doctrin:
 php app/console doctrine:mongodb:generate:documents AcmeStoreBundle
+
+# Install bundle css to main symfony
+sudo app/console assets:install web
+
