@@ -1,0 +1,4 @@
+## create project
+composer create-project laravel/laravel risk-toolbox
+
+chmod -R 777 app/storage

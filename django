@@ -1,0 +1,5 @@
+Creating a project 
+/usr/local/bin/django-admin.py startproject mysite
+
+Start site: (domU is the server hostname)
+python manage.py runserver domU-12-31-39-0E-31-D2:8000
