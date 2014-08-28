@@ -1,0 +1,1 @@
+mysql -e "source /path-to-backup/backup-file.sql" db_name
