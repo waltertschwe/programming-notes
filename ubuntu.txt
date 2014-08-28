@@ -1,2 +1,11 @@
 ## list all installed packages
 dpkg --get-selections | grep -v deinstall
+
+## save list to text file:
+dpkg --get-selections | grep -v deinstall > ~/packages.txt
+
+## system folders disk space usage
+sudo du -h --max-depth=1 /
+
+## searches subfolder with greater than 1gb of space 
+sudo du / -h --max-depth=1 | grep '[0-9]G\>' 
